@@ -7,12 +7,25 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+
+use Symfony\Component\Security\Core\Encoder\SodiumPasswordEncoder;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
  */
 class User implements UserInterface
 {
+
+    public function setPassword(string $password): self
+    {
+        $encoder = new SodiumPasswordEncoder();
+
+       $this->password = $encoder->encodePassword($password, $this->getSalt());
+
+       return $this;
+    }
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -116,12 +129,6 @@ class User implements UserInterface
         return $this->password;
     }
 
-    public function setPassword(string $password): self
-    {
-        $this->password = $password;
-
-        return $this;
-    }
 
     /**
      * Returning a salt is only needed, if you are not using a modern
