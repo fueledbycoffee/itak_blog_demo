@@ -18,7 +18,7 @@ class HomeController extends AbstractController
         $this->repoArticle = $repoArticle;
     }
 
-    #[Route('/home', name: 'home')]
+    #[Route('/', name: 'home')]
     public function index(CategoryRepository $repoCategory): Response
     {
 
